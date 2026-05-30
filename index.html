@@ -437,8 +437,8 @@ Featured Websites
 </div>
 
 </div>
-
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<<script>
 
 const SUPABASE_URL =
 "https://gldbfztlxnkoqwojexjp.supabase.co";
@@ -446,7 +446,7 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsZGJmenRseG5rb3F3b2pleGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjEwODEsImV4cCI6MjA5NTY5NzA4MX0.FkTob0CX1yoJq1kf6mZdJIe9kfFBEHLO3wQ_L5uNmzo";
 
-const supabase =
+const db =
 window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_ANON_KEY
@@ -455,16 +455,24 @@ SUPABASE_ANON_KEY
 let websites = [];
 let selectedCategory = "all";
 
+/* ---------------- LOAD WEBSITES ---------------- */
+
 async function loadWebsites(){
 
-const {data,error} =
-await supabase
-.from("websites")
+try{
+
+const { data, error } =
+await db
+.from("website-files")
 .select("*")
-.order("created_at",{ascending:false});
+.order("created_at", { ascending:false });
+
+console.log("DATA:", data);
+console.log("ERROR:", error);
 
 if(error){
 console.error(error);
+alert(error.message);
 return;
 }
 
@@ -472,7 +480,16 @@ websites = data || [];
 
 renderCards();
 
+}catch(err){
+
+console.error(err);
+alert(err.message);
+
 }
+
+}
+
+/* ---------------- RENDER CARDS ---------------- */
 
 function renderCards(){
 
@@ -491,29 +508,45 @@ const filtered =
 websites.filter(site=>{
 
 const searchMatch =
-site.name.toLowerCase().includes(search) ||
-site.category.toLowerCase().includes(search) ||
+
+(site.name || "")
+.toLowerCase()
+.includes(search)
+
+||
+
+(site.category || "")
+.toLowerCase()
+.includes(search)
+
+||
+
 (site.description || "")
 .toLowerCase()
 .includes(search);
 
 const categoryMatch =
+
 selectedCategory === "all"
+
 ? true
-: site.category === selectedCategory;
+
+: (site.category || "")
+=== selectedCategory;
 
 return searchMatch && categoryMatch;
 
 });
 
-if(filtered.length===0){
+if(filtered.length === 0){
 
 container.innerHTML = `
 <div style="
 grid-column:1/-1;
 text-align:center;
 padding:80px;
-color:#94a3b8;">
+color:#94a3b8;
+font-size:18px;">
 No websites found.
 </div>
 `;
@@ -529,35 +562,45 @@ container.innerHTML += `
 <div class="card">
 
 <div class="card-image">
-<img src="${site.thumbnail_url}" alt="">
+
+<img
+src="${site.thumbnail_url || ''}"
+alt="${site.name || ''}"
+loading="lazy"
+>
+
 </div>
 
 <div class="card-body">
 
 <div class="category">
-${site.category}
+${site.category || 'Other'}
 </div>
 
 <div class="card-title">
-${site.name}
+${site.name || 'Untitled'}
 </div>
 
 <div class="card-desc">
-${site.description || ""}
+${site.description || ''}
 </div>
 
 <div class="card-actions">
 
 <button
 class="open-btn"
-onclick="window.open('${site.live_url}','_blank')">
+onclick="window.open('${site.live_url || '#'}','_blank')">
+
 Open Website
+
 </button>
 
 <button
 class="download-btn"
-onclick="window.open('${site.zip_url}','_blank')">
+onclick="window.open('${site.zip_url || '#'}','_blank')">
+
 Download ZIP
+
 </button>
 
 </div>
@@ -572,19 +615,27 @@ Download ZIP
 
 }
 
+/* ---------------- SEARCH ---------------- */
+
 document
 .getElementById("searchInput")
-.addEventListener("input",renderCards);
+.addEventListener("input", () => {
+
+renderCards();
+
+});
+
+/* ---------------- CATEGORY FILTER ---------------- */
 
 document
 .querySelectorAll(".category-btn")
-.forEach(btn=>{
+.forEach(btn => {
 
-btn.addEventListener("click",()=>{
+btn.addEventListener("click", () => {
 
 document
 .querySelectorAll(".category-btn")
-.forEach(b=>b.classList.remove("active"));
+.forEach(b => b.classList.remove("active"));
 
 btn.classList.add("active");
 
@@ -596,6 +647,8 @@ renderCards();
 });
 
 });
+
+/* ---------------- START ---------------- */
 
 loadWebsites();
 
