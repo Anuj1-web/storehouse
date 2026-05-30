@@ -10,17 +10,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-
 :root{
---bg:#070b17;
---card:rgba(255,255,255,.06);
+--bg:#050816;
+--bg2:#0b1023;
+--card:rgba(255,255,255,.055);
+--card-hover:rgba(255,255,255,.08);
 --border:rgba(255,255,255,.08);
 --text:#ffffff;
---muted:#94a3b8;
---primary:#7c3aed;
+--muted:#9ca3af;
+
+--primary:#8b5cf6;
 --secondary:#06b6d4;
---shadow:0 20px 60px rgba(0,0,0,.45);
+--accent:#f59e0b;
+
+--shadow:
+0 20px 60px rgba(0,0,0,.45);
+
+--glow:
+0 0 30px rgba(139,92,246,.35);
 }
 
 *{
@@ -35,9 +42,11 @@ scroll-behavior:smooth;
 }
 
 body{
-background:#070b17;
+background:
+linear-gradient(180deg,#050816 0%,#090f1f 100%);
 color:white;
 overflow-x:hidden;
+min-height:100vh;
 }
 
 body::before{
@@ -45,9 +54,10 @@ content:"";
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at 15% 20%,rgba(124,58,237,.35),transparent 30%),
-radial-gradient(circle at 85% 15%,rgba(6,182,212,.25),transparent 30%),
-radial-gradient(circle at 50% 90%,rgba(236,72,153,.12),transparent 35%);
+radial-gradient(circle at 10% 20%,rgba(139,92,246,.35),transparent 35%),
+radial-gradient(circle at 90% 10%,rgba(6,182,212,.25),transparent 35%),
+radial-gradient(circle at 50% 90%,rgba(245,158,11,.12),transparent 40%);
+animation:aurora 12s ease-in-out infinite alternate;
 z-index:-2;
 }
 
@@ -59,6 +69,15 @@ backdrop-filter:blur(120px);
 z-index:-1;
 }
 
+@keyframes aurora{
+0%{
+transform:scale(1);
+}
+100%{
+transform:scale(1.15);
+}
+}
+
 .container{
 width:min(1500px,92%);
 margin:auto;
@@ -67,254 +86,433 @@ margin:auto;
 /* NAVBAR */
 
 .navbar{
-padding:24px 0;
+position:sticky;
+top:20px;
+z-index:999;
+margin-top:20px;
+padding:18px 24px;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
+background:rgba(255,255,255,.04);
+backdrop-filter:blur(30px);
+
+border:1px solid rgba(255,255,255,.08);
+
+border-radius:24px;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.35);
 }
 
 .logo{
-font-size:30px;
+font-size:34px;
 font-weight:900;
 letter-spacing:.5px;
-background:linear-gradient(90deg,#7c3aed,#06b6d4);
+
+background:
+linear-gradient(
+90deg,
+#ffffff,
+#8b5cf6,
+#06b6d4
+);
+
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.nav-right{
-display:flex;
-gap:12px;
-}
-
 .btn{
-padding:14px 22px;
+padding:15px 24px;
 border:none;
 cursor:pointer;
-border-radius:14px;
-font-weight:700;
+border-radius:16px;
+
 font-size:14px;
-color:white;
-transition:.3s;
+font-weight:800;
+
 text-decoration:none;
-display:inline-flex;
+display:flex;
 align-items:center;
 justify-content:center;
+
+transition:.35s;
 }
 
 .btn-primary{
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
-box-shadow:0 10px 30px rgba(124,58,237,.4);
+background:
+linear-gradient(
+135deg,
+#8b5cf6,
+#06b6d4
+);
+
+box-shadow:
+0 15px 40px rgba(139,92,246,.35);
 }
 
 .btn-primary:hover{
-transform:translateY(-3px);
+transform:translateY(-4px);
+box-shadow:
+0 20px 50px rgba(139,92,246,.5);
 }
 
 /* HERO */
 
 .hero{
-padding:90px 0 70px;
+padding:140px 0 90px;
 text-align:center;
+position:relative;
+}
+
+.hero::before{
+content:"";
+position:absolute;
+left:50%;
+top:40px;
+transform:translateX(-50%);
+width:500px;
+height:500px;
+
+background:
+radial-gradient(
+circle,
+rgba(139,92,246,.25),
+transparent 70%
+);
+
+filter:blur(50px);
+z-index:-1;
 }
 
 .hero-badge{
 display:inline-flex;
-padding:10px 18px;
+
+padding:12px 22px;
+
 border-radius:999px;
-background:rgba(255,255,255,.06);
-border:1px solid rgba(255,255,255,.08);
-margin-bottom:25px;
-color:#cbd5e1;
+
+background:
+rgba(255,255,255,.06);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+color:#dbeafe;
+
 font-size:13px;
+font-weight:700;
+
+margin-bottom:30px;
 }
 
 .hero h1{
-font-size:clamp(42px,6vw,90px);
+font-size:clamp(60px,8vw,110px);
 font-weight:900;
-line-height:1.05;
-margin-bottom:25px;
+
+line-height:.95;
+
+margin-bottom:28px;
+
+letter-spacing:-2px;
 }
 
 .hero h1 span{
-background:linear-gradient(90deg,#7c3aed,#06b6d4);
+background:
+linear-gradient(
+90deg,
+#8b5cf6,
+#06b6d4,
+#f59e0b
+);
+
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
 .hero p{
 max-width:850px;
+
 margin:auto;
-font-size:18px;
-line-height:1.8;
+
+font-size:20px;
+line-height:1.9;
+
 color:#cbd5e1;
 }
 
-/* SEARCH AREA */
+/* SEARCH */
 
 .search-section{
-margin-top:50px;
-margin-bottom:50px;
+margin-top:20px;
+margin-bottom:70px;
 }
 
 .search-box{
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,.08);
-border-radius:24px;
-padding:20px;
-box-shadow:var(--shadow);
+padding:28px;
+
+border-radius:30px;
+
+background:
+rgba(255,255,255,.05);
+
+backdrop-filter:blur(30px);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.35);
 }
 
 .search-input{
 width:100%;
-padding:18px 20px;
+
+padding:22px 24px;
+
 border:none;
 outline:none;
+
 border-radius:18px;
-background:rgba(255,255,255,.05);
+
+background:
+rgba(255,255,255,.06);
+
 color:white;
+
 font-size:16px;
 }
 
-.search-input::placeholder{
-color:#94a3b8;
+.search-input:focus{
+box-shadow:
+0 0 0 2px rgba(139,92,246,.4);
 }
 
 .categories{
 display:flex;
 flex-wrap:wrap;
-gap:12px;
-margin-top:18px;
+gap:14px;
+margin-top:22px;
 }
 
 .category-btn{
-padding:10px 16px;
+padding:12px 18px;
+
 border-radius:999px;
-border:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.04);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+background:
+rgba(255,255,255,.04);
+
 color:white;
+
 cursor:pointer;
+
 transition:.3s;
 }
 
 .category-btn:hover,
 .category-btn.active{
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
-border-color:transparent;
+background:
+linear-gradient(
+135deg,
+#8b5cf6,
+#06b6d4
+);
+
+transform:translateY(-2px);
+}
+
+/* SECTION */
+
+.section-title{
+font-size:42px;
+font-weight:900;
+margin-bottom:35px;
 }
 
 /* CARDS */
 
-.section-title{
-font-size:32px;
-font-weight:800;
-margin-bottom:30px;
-}
-
 .cards{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-gap:28px;
-padding-bottom:80px;
+grid-template-columns:
+repeat(auto-fill,minmax(360px,1fr));
+
+gap:30px;
+
+padding-bottom:100px;
 }
 
 .card{
-background:rgba(255,255,255,.05);
+position:relative;
+
+background:
+rgba(255,255,255,.05);
+
 backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,.08);
-border-radius:28px;
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:30px;
+
 overflow:hidden;
-transition:.35s;
+
+transition:.4s;
+
 box-shadow:var(--shadow);
 }
 
 .card:hover{
-transform:translateY(-8px);
+transform:
+translateY(-12px);
+
+border-color:
+rgba(139,92,246,.5);
+
+box-shadow:
+0 30px 70px rgba(0,0,0,.45),
+0 0 40px rgba(139,92,246,.18);
 }
 
 .card-image{
-position:relative;
+height:240px;
 overflow:hidden;
-height:230px;
 }
 
 .card-image img{
 width:100%;
 height:100%;
 object-fit:cover;
-transition:.5s;
+
+transition:.6s;
 }
 
 .card:hover img{
-transform:scale(1.06);
+transform:scale(1.08);
 }
 
 .card-body{
-padding:24px;
+padding:28px;
 }
 
 .category{
 display:inline-flex;
-padding:8px 14px;
+
+padding:8px 15px;
+
 border-radius:999px;
-background:rgba(124,58,237,.18);
+
+background:
+rgba(139,92,246,.18);
+
+color:#d8b4fe;
+
 font-size:12px;
-margin-bottom:15px;
+font-weight:700;
+
+margin-bottom:16px;
 }
 
 .card-title{
-font-size:24px;
+font-size:25px;
 font-weight:800;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .card-desc{
-color:#cbd5e1;
 font-size:14px;
-line-height:1.8;
-min-height:75px;
-margin-bottom:20px;
+line-height:1.9;
+
+color:#cbd5e1;
+
+margin-bottom:24px;
+
+min-height:85px;
 }
 
 .card-actions{
 display:flex;
-gap:10px;
+gap:12px;
 }
 
 .open-btn,
 .download-btn{
 flex:1;
-padding:13px;
+
+padding:14px;
+
 border:none;
-border-radius:14px;
-font-weight:700;
+
+border-radius:16px;
+
+font-weight:800;
+
 cursor:pointer;
-color:white;
+
+transition:.3s;
 }
 
 .open-btn{
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
+background:
+linear-gradient(
+135deg,
+#8b5cf6,
+#06b6d4
+);
+
+color:white;
 }
 
 .download-btn{
-background:#0f172a;
-border:1px solid rgba(255,255,255,.08);
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+color:white;
+}
+
+.open-btn:hover,
+.download-btn:hover{
+transform:translateY(-2px);
 }
 
 /* FOOTER */
 
 .footer{
-padding:50px 0;
+margin-top:40px;
+
+padding:70px 0;
+
 text-align:center;
+
 color:#94a3b8;
-border-top:1px solid rgba(255,255,255,.06);
+
+border-top:
+1px solid rgba(255,255,255,.06);
 }
+
+/* MOBILE */
 
 @media(max-width:768px){
 
+.navbar{
+flex-direction:column;
+gap:18px;
+}
+
 .hero{
-padding:70px 0 50px;
+padding:100px 0 70px;
+}
+
+.hero h1{
+font-size:58px;
 }
 
 .hero p{
@@ -325,118 +523,7 @@ font-size:16px;
 grid-template-columns:1fr;
 }
 
-.navbar{
-flex-direction:column;
-gap:20px;
 }
-
-}
-
-</style>
-</head>
-<body>
-
-<div class="container">
-
-<nav class="navbar">
-
-<div class="logo">
-Website Vault
-</div>
-
-<div class="nav-right">
-<a href="admin.html" class="btn btn-primary">
-Admin Panel
-</a>
-</div>
-
-</nav>
-
-<section class="hero">
-
-<div class="hero-badge">
-Premium Website Collection
-</div>
-
-<h1>
-Discover Luxury <br>
-<span>Website Templates</span>
-</h1>
-
-<p>
-Explore a curated vault of premium websites, landing pages,
-dashboards, portfolios, ecommerce projects and modern web experiences.
-Browse, preview and download production-ready projects.
-</p>
-
-</section>
-
-<section class="search-section">
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-class="search-input"
-placeholder="Search websites, templates, categories..."
->
-
-<div class="categories">
-
-<button class="category-btn active" data-category="all">
-All
-</button>
-
-<button class="category-btn" data-category="Business">
-Business
-</button>
-
-<button class="category-btn" data-category="E-Commerce">
-E-Commerce
-</button>
-
-<button class="category-btn" data-category="Portfolio">
-Portfolio
-</button>
-
-<button class="category-btn" data-category="Education">
-Education
-</button>
-
-<button class="category-btn" data-category="Dashboard">
-Dashboard
-</button>
-
-<button class="category-btn" data-category="Tools">
-Tools
-</button>
-
-<button class="category-btn" data-category="Agency">
-Agency
-</button>
-
-<button class="category-btn" data-category="Blog">
-Blog
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<h2 class="section-title">
-Featured Websites
-</h2>
-
-<div class="cards" id="cardsContainer"></div>
-
-<div class="footer">
-© 2026 Website Vault • Premium Website Library
-</div>
-
-</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <<script>
 
