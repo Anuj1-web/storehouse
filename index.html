@@ -1102,15 +1102,9 @@ font-size:13px;
 
 <nav class="navbar">
 
-<div class="logo">
-Website Vault
-</div>
-
-<div class="nav-right">
-<a href="admin.html" class="btn btn-primary">
-Admin Panel
-</a>
-</div>
+  <div class="logo" onclick="goAdmin()">
+    Website <span>Vault</span>
+  </div>
 
 </nav>
 
@@ -1408,6 +1402,9 @@ renderCards();
 /* ---------------- START ---------------- */
 
 loadWebsites();
+  function goAdmin(){
+  window.location.href = "admin.html";
+}
 
 </script>
 
