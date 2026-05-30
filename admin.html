@@ -10,63 +10,132 @@
 
 <style>
 
+/* =========================
+   WEBSITE VAULT ADMIN (MATCHED PREMIUM UI)
+   OBSIDIAN + GOLD + SAPPHIRE THEME
+========================= */
+
 :root{
---bg:#070b17;
---card:rgba(255,255,255,.06);
---border:rgba(255,255,255,.1);
---text:#fff;
---muted:#94a3b8;
---primary:#7c3aed;
---secondary:#06b6d4;
---danger:#ef4444;
---success:#10b981;
---shadow:0 20px 50px rgba(0,0,0,.4);
+
+--bg:#050505;
+--bg2:#0b0b0d;
+
+--card:rgba(255,255,255,.035);
+--card2:rgba(255,255,255,.05);
+
+--border:rgba(214,179,106,.12);
+
+--text:#ffffff;
+--muted:#9aa0a6;
+
+--gold:#d6b36a;
+--gold-light:#f4dca2;
+
+--blue:#4f7cff;
+
+--gradient:
+linear-gradient(135deg,#d6b36a 0%,#f4dca2 40%,#4f7cff 100%);
+
+--shadow:0 30px 100px rgba(0,0,0,.7);
+
+--radius:22px;
+
 }
+
+/* =========================
+   RESET
+========================= */
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Inter,sans-serif;
+font-family:'Inter',sans-serif;
 }
 
 body{
-background:#070b17;
-color:white;
+
+background:
+linear-gradient(180deg,#050505 0%,#0b0b10 50%,#111114 100%);
+
+color:var(--text);
+
 min-height:100vh;
+
 overflow-x:hidden;
+
 }
 
+/* =========================
+   BACKGROUND GLOW (MATCH INDEX)
+========================= */
+
 body::before{
+
+content:"";
+position:fixed;
+inset:-20%;
+
+background:
+
+radial-gradient(circle at 20% 20%,rgba(214,179,106,.12),transparent 30%),
+radial-gradient(circle at 80% 10%,rgba(79,124,255,.10),transparent 28%),
+radial-gradient(circle at 50% 90%,rgba(214,179,106,.08),transparent 35%);
+
+pointer-events:none;
+z-index:-2;
+
+}
+
+body::after{
+
 content:"";
 position:fixed;
 inset:0;
-background:
-radial-gradient(circle at 20% 20%,rgba(124,58,237,.3),transparent 30%),
-radial-gradient(circle at 80% 20%,rgba(6,182,212,.25),transparent 30%),
-radial-gradient(circle at 50% 80%,rgba(236,72,153,.15),transparent 35%);
+
+backdrop-filter:blur(100px);
+
+background:linear-gradient(180deg,rgba(255,255,255,.01),transparent);
+
 z-index:-1;
+
 }
 
+/* =========================
+   CONTAINER
+========================= */
+
 .container{
-width:min(1500px,95%);
+width:min(1500px,92%);
 margin:auto;
 padding:25px 0;
 }
 
+/* =========================
+   TOPBAR
+========================= */
+
 .topbar{
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 margin-bottom:25px;
+
 }
 
 .logo{
+
 font-size:28px;
-font-weight:800;
-background:linear-gradient(90deg,#7c3aed,#06b6d4);
+font-weight:900;
+
+background:var(--gradient);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+
+filter:drop-shadow(0 0 20px rgba(214,179,106,.25));
+
 }
 
 .actions{
@@ -74,210 +143,434 @@ display:flex;
 gap:10px;
 }
 
+/* =========================
+   BUTTONS
+========================= */
+
 .btn{
+
 border:none;
 cursor:pointer;
+
 padding:12px 18px;
-border-radius:12px;
-font-weight:600;
-color:white;
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
+
+border-radius:14px;
+
+font-weight:700;
+
+color:#050505;
+
+background:var(--gradient);
+
+transition:.3s;
+
+}
+
+.btn:hover{
+transform:translateY(-3px);
 }
 
 .btn-danger{
-background:#ef4444;
+background:linear-gradient(135deg,#ef4444,#ff6b6b);
+color:white;
 }
 
+/* =========================
+   STATS CARDS
+========================= */
+
+.stats{
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+
+gap:15px;
+
+margin-bottom:25px;
+
+}
+
+.stat{
+
+padding:20px;
+
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(214,179,106,.08);
+
+border-radius:18px;
+
+text-align:center;
+
+backdrop-filter:blur(20px);
+
+}
+
+.stat h2{
+font-size:30px;
+color:var(--gold-light);
+}
+
+.stat p{
+font-size:13px;
+color:var(--muted);
+}
+
+/* =========================
+   GRID LAYOUT
+========================= */
+
 .grid{
+
 display:grid;
 grid-template-columns:420px 1fr;
 gap:25px;
+
 }
 
+/* =========================
+   PANELS (GLASS EFFECT)
+========================= */
+
 .panel{
-background:var(--card);
-backdrop-filter:blur(20px);
-border:1px solid var(--border);
+
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(214,179,106,.10);
+
+backdrop-filter:blur(25px);
+
 border-radius:24px;
+
 padding:24px;
+
 box-shadow:var(--shadow);
+
 }
 
 .panel-title{
-font-size:20px;
-font-weight:700;
-margin-bottom:20px;
+
+font-size:18px;
+font-weight:800;
+
+margin-bottom:18px;
+
+color:#fff;
+
 }
 
+/* =========================
+   FORM ELEMENTS (FIXED DROPDOWN ISSUE)
+========================= */
+
 .form-group{
-margin-bottom:16px;
+margin-bottom:14px;
 }
 
 label{
 display:block;
 margin-bottom:8px;
-font-size:14px;
-color:#cbd5e1;
+font-size:13px;
+color:var(--muted);
 }
 
+/* INPUTS */
 input,
 textarea,
 select{
+
 width:100%;
+
 padding:14px;
+
 border-radius:14px;
-border:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.04);
+
+border:1px solid rgba(214,179,106,.12);
+
+background:rgba(0,0,0,.35);
+
 color:white;
+
 outline:none;
-}
 
-textarea{
-resize:vertical;
-min-height:120px;
-}
+font-size:14px;
 
-.save-btn{
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-cursor:pointer;
-font-weight:700;
-background:linear-gradient(135deg,#7c3aed,#06b6d4);
-color:white;
-}
-
-.search{
-margin-bottom:20px;
-}
-
-.search input{
-width:100%;
-padding:16px;
-border-radius:14px;
-border:none;
-background:rgba(255,255,255,.06);
-color:white;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-gap:20px;
-}
-
-.site-card{
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
-border-radius:20px;
-overflow:hidden;
 transition:.3s;
+
 }
 
-.site-card:hover{
-transform:translateY(-5px);
-}
-
-.site-card img{
-width:100%;
-height:190px;
-object-fit:cover;
-}
-
-.card-content{
-padding:18px;
-}
-
-.card-title{
-font-size:20px;
-font-weight:700;
-margin-bottom:8px;
-}
-
-.card-category{
-display:inline-block;
-padding:6px 12px;
-border-radius:50px;
-background:rgba(124,58,237,.2);
-margin-bottom:10px;
-font-size:12px;
-}
-
-.card-desc{
-font-size:13px;
-color:#cbd5e1;
-margin-bottom:14px;
-line-height:1.6;
-}
-
-.card-actions{
-display:flex;
-gap:10px;
-}
-
-.edit-btn,
-.delete-btn,
-.visit-btn{
-flex:1;
-padding:10px;
-border:none;
-cursor:pointer;
-border-radius:10px;
-font-weight:600;
+/* FIX DROPDOWN VISIBILITY */
+select{
+background:#0b0b10;
 color:white;
 }
 
-.edit-btn{
-background:#06b6d4;
+select option{
+background:#0b0b10;
+color:white;
 }
 
-.delete-btn{
-background:#ef4444;
+/* FOCUS */
+input:focus,
+textarea:focus,
+select:focus{
+
+border-color:rgba(214,179,106,.4);
+
+box-shadow:0 0 25px rgba(214,179,106,.15);
+
 }
 
-.visit-btn{
-background:#7c3aed;
+/* TEXTAREA */
+textarea{
+min-height:110px;
+resize:vertical;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin-bottom:20px;
-}
-
-.stat{
-padding:20px;
-background:rgba(255,255,255,.05);
-border-radius:18px;
-text-align:center;
-}
-
-.stat h2{
-font-size:32px;
-}
-
-.stat p{
-color:#94a3b8;
-}
+/* =========================
+   FILE UPLOAD (FIX VISIBILITY + FEEDBACK LOOK)
+========================= */
 
 .file-label{
+
+display:block;
+
 padding:14px;
-border:2px dashed rgba(255,255,255,.15);
+
+border:1px dashed rgba(214,179,106,.25);
+
 border-radius:14px;
+
 text-align:center;
+
 cursor:pointer;
+
+color:var(--gold-light);
+
+background:rgba(255,255,255,.02);
+
+transition:.3s;
+
+}
+
+.file-label:hover{
+background:rgba(214,179,106,.05);
+border-color:rgba(214,179,106,.4);
 }
 
 input[type=file]{
 display:none;
 }
 
+/* =========================
+   SAVE BUTTON
+========================= */
+
+.save-btn{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:14px;
+
+cursor:pointer;
+
+font-weight:800;
+
+background:var(--gradient);
+
+color:#050505;
+
+transition:.3s;
+
+}
+
+.save-btn:hover{
+transform:translateY(-3px);
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+margin-bottom:18px;
+}
+
+.search input{
+
+width:100%;
+
+padding:14px;
+
+border-radius:14px;
+
+border:1px solid rgba(214,179,106,.10);
+
+background:rgba(255,255,255,.03);
+
+color:white;
+
+}
+
+/* =========================
+   SITE CARDS
+========================= */
+
+.cards{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+
+gap:18px;
+
+}
+
+.site-card{
+
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(214,179,106,.10);
+
+border-radius:20px;
+
+overflow:hidden;
+
+transition:.3s;
+
+backdrop-filter:blur(20px);
+
+}
+
+.site-card:hover{
+transform:translateY(-6px);
+border-color:rgba(214,179,106,.25);
+}
+
+.site-card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card-content{
+padding:16px;
+}
+
+.card-title{
+font-size:18px;
+font-weight:800;
+margin-bottom:6px;
+}
+
+.card-category{
+
+display:inline-block;
+
+padding:6px 12px;
+
+border-radius:999px;
+
+background:rgba(214,179,106,.12);
+
+color:var(--gold-light);
+
+font-size:11px;
+
+margin-bottom:10px;
+
+}
+
+.card-desc{
+font-size:13px;
+color:var(--muted);
+margin-bottom:12px;
+line-height:1.6;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.card-actions{
+
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+
+gap:8px;
+
+}
+
+.edit-btn,
+.delete-btn,
+.visit-btn{
+
+padding:9px;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:700;
+
+font-size:12px;
+
+color:white;
+
+transition:.3s;
+
+}
+
+.edit-btn{
+background:linear-gradient(135deg,#06b6d4,#3b82f6);
+}
+
+.delete-btn{
+background:linear-gradient(135deg,#ef4444,#ff6b6b);
+}
+
+.visit-btn{
+background:var(--gradient);
+color:#050505;
+}
+
+.edit-btn:hover,
+.delete-btn:hover,
+.visit-btn:hover{
+transform:translateY(-3px);
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
 @media(max-width:1100px){
 .grid{
 grid-template-columns:1fr;
 }
+}
+
+@media(max-width:768px){
+
+.stats{
+grid-template-columns:1fr;
+}
+
+.card-actions{
+grid-template-columns:1fr;
+}
+
+.topbar{
+flex-direction:column;
+gap:12px;
+}
+
 }
 
 </style>
