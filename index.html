@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Website Vault</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+--bg:#070b17;
+--card:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.08);
+--text:#ffffff;
+--muted:#94a3b8;
+--primary:#7c3aed;
+--secondary:#06b6d4;
+--shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:#070b17;
+color:white;
+overflow-x:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 15% 20%,rgba(124,58,237,.35),transparent 30%),
+radial-gradient(circle at 85% 15%,rgba(6,182,212,.25),transparent 30%),
+radial-gradient(circle at 50% 90%,rgba(236,72,153,.12),transparent 35%);
+z-index:-2;
+}
+
+body::after{
+content:"";
+position:fixed;
+inset:0;
+backdrop-filter:blur(120px);
+z-index:-1;
+}
+
+.container{
+width:min(1500px,92%);
+margin:auto;
+}
+
+/* NAVBAR */
+
+.navbar{
+padding:24px 0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:30px;
+font-weight:900;
+letter-spacing:.5px;
+background:linear-gradient(90deg,#7c3aed,#06b6d4);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.nav-right{
+display:flex;
+gap:12px;
+}
+
+.btn{
+padding:14px 22px;
+border:none;
+cursor:pointer;
+border-radius:14px;
+font-weight:700;
+font-size:14px;
+color:white;
+transition:.3s;
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,#7c3aed,#06b6d4);
+box-shadow:0 10px 30px rgba(124,58,237,.4);
+}
+
+.btn-primary:hover{
+transform:translateY(-3px);
+}
+
+/* HERO */
+
+.hero{
+padding:90px 0 70px;
+text-align:center;
+}
+
+.hero-badge{
+display:inline-flex;
+padding:10px 18px;
+border-radius:999px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.08);
+margin-bottom:25px;
+color:#cbd5e1;
+font-size:13px;
+}
+
+.hero h1{
+font-size:clamp(42px,6vw,90px);
+font-weight:900;
+line-height:1.05;
+margin-bottom:25px;
+}
+
+.hero h1 span{
+background:linear-gradient(90deg,#7c3aed,#06b6d4);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+max-width:850px;
+margin:auto;
+font-size:18px;
+line-height:1.8;
+color:#cbd5e1;
+}
+
+/* SEARCH AREA */
+
+.search-section{
+margin-top:50px;
+margin-bottom:50px;
+}
+
+.search-box{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:24px;
+padding:20px;
+box-shadow:var(--shadow);
+}
+
+.search-input{
+width:100%;
+padding:18px 20px;
+border:none;
+outline:none;
+border-radius:18px;
+background:rgba(255,255,255,.05);
+color:white;
+font-size:16px;
+}
+
+.search-input::placeholder{
+color:#94a3b8;
+}
+
+.categories{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:18px;
+}
+
+.category-btn{
+padding:10px 16px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.04);
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.category-btn:hover,
+.category-btn.active{
+background:linear-gradient(135deg,#7c3aed,#06b6d4);
+border-color:transparent;
+}
+
+/* CARDS */
+
+.section-title{
+font-size:32px;
+font-weight:800;
+margin-bottom:30px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+gap:28px;
+padding-bottom:80px;
+}
+
+.card{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:28px;
+overflow:hidden;
+transition:.35s;
+box-shadow:var(--shadow);
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card-image{
+position:relative;
+overflow:hidden;
+height:230px;
+}
+
+.card-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:.5s;
+}
+
+.card:hover img{
+transform:scale(1.06);
+}
+
+.card-body{
+padding:24px;
+}
+
+.category{
+display:inline-flex;
+padding:8px 14px;
+border-radius:999px;
+background:rgba(124,58,237,.18);
+font-size:12px;
+margin-bottom:15px;
+}
+
+.card-title{
+font-size:24px;
+font-weight:800;
+margin-bottom:10px;
+}
+
+.card-desc{
+color:#cbd5e1;
+font-size:14px;
+line-height:1.8;
+min-height:75px;
+margin-bottom:20px;
+}
+
+.card-actions{
+display:flex;
+gap:10px;
+}
+
+.open-btn,
+.download-btn{
+flex:1;
+padding:13px;
+border:none;
+border-radius:14px;
+font-weight:700;
+cursor:pointer;
+color:white;
+}
+
+.open-btn{
+background:linear-gradient(135deg,#7c3aed,#06b6d4);
+}
+
+.download-btn{
+background:#0f172a;
+border:1px solid rgba(255,255,255,.08);
+}
+
+/* FOOTER */
+
+.footer{
+padding:50px 0;
+text-align:center;
+color:#94a3b8;
+border-top:1px solid rgba(255,255,255,.06);
+}
+
+@media(max-width:768px){
+
+.hero{
+padding:70px 0 50px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+.navbar{
+flex-direction:column;
+gap:20px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<nav class="navbar">
+
+<div class="logo">
+Website Vault
+</div>
+
+<div class="nav-right">
+<a href="admin.html" class="btn btn-primary">
+Admin Panel
+</a>
+</div>
+
+</nav>
+
+<section class="hero">
+
+<div class="hero-badge">
+Premium Website Collection
+</div>
+
+<h1>
+Discover Luxury <br>
+<span>Website Templates</span>
+</h1>
+
+<p>
+Explore a curated vault of premium websites, landing pages,
+dashboards, portfolios, ecommerce projects and modern web experiences.
+Browse, preview and download production-ready projects.
+</p>
+
+</section>
+
+<section class="search-section">
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+class="search-input"
+placeholder="Search websites, templates, categories..."
+>
+
+<div class="categories">
+
+<button class="category-btn active" data-category="all">
+All
+</button>
+
+<button class="category-btn" data-category="Business">
+Business
+</button>
+
+<button class="category-btn" data-category="E-Commerce">
+E-Commerce
+</button>
+
+<button class="category-btn" data-category="Portfolio">
+Portfolio
+</button>
+
+<button class="category-btn" data-category="Education">
+Education
+</button>
+
+<button class="category-btn" data-category="Dashboard">
+Dashboard
+</button>
+
+<button class="category-btn" data-category="Tools">
+Tools
+</button>
+
+<button class="category-btn" data-category="Agency">
+Agency
+</button>
+
+<button class="category-btn" data-category="Blog">
+Blog
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<h2 class="section-title">
+Featured Websites
+</h2>
+
+<div class="cards" id="cardsContainer"></div>
+
+<div class="footer">
+© 2026 Website Vault • Premium Website Library
+</div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+"https://gldbfztlxnkoqwojexjp.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsZGJmenRseG5rb3F3b2pleGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjEwODEsImV4cCI6MjA5NTY5NzA4MX0.FkTob0CX1yoJq1kf6mZdJIe9kfFBEHLO3wQ_L5uNmzo";
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+let websites = [];
+let selectedCategory = "all";
+
+async function loadWebsites(){
+
+const {data,error} =
+await supabase
+.from("websites")
+.select("*")
+.order("created_at",{ascending:false});
+
+if(error){
+console.error(error);
+return;
+}
+
+websites = data || [];
+
+renderCards();
+
+}
+
+function renderCards(){
+
+const search =
+document
+.getElementById("searchInput")
+.value
+.toLowerCase();
+
+const container =
+document.getElementById("cardsContainer");
+
+container.innerHTML = "";
+
+const filtered =
+websites.filter(site=>{
+
+const searchMatch =
+site.name.toLowerCase().includes(search) ||
+site.category.toLowerCase().includes(search) ||
+(site.description || "")
+.toLowerCase()
+.includes(search);
+
+const categoryMatch =
+selectedCategory === "all"
+? true
+: site.category === selectedCategory;
+
+return searchMatch && categoryMatch;
+
+});
+
+if(filtered.length===0){
+
+container.innerHTML = `
+<div style="
+grid-column:1/-1;
+text-align:center;
+padding:80px;
+color:#94a3b8;">
+No websites found.
+</div>
+`;
+
+return;
+
+}
+
+filtered.forEach(site=>{
+
+container.innerHTML += `
+
+<div class="card">
+
+<div class="card-image">
+<img src="${site.thumbnail_url}" alt="">
+</div>
+
+<div class="card-body">
+
+<div class="category">
+${site.category}
+</div>
+
+<div class="card-title">
+${site.name}
+</div>
+
+<div class="card-desc">
+${site.description || ""}
+</div>
+
+<div class="card-actions">
+
+<button
+class="open-btn"
+onclick="window.open('${site.live_url}','_blank')">
+Open Website
+</button>
+
+<button
+class="download-btn"
+onclick="window.open('${site.zip_url}','_blank')">
+Download ZIP
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+document
+.getElementById("searchInput")
+.addEventListener("input",renderCards);
+
+document
+.querySelectorAll(".category-btn")
+.forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document
+.querySelectorAll(".category-btn")
+.forEach(b=>b.classList.remove("active"));
+
+btn.classList.add("active");
+
+selectedCategory =
+btn.dataset.category;
+
+renderCards();
+
+});
+
+});
+
+loadWebsites();
+
+</script>
+
+</body>
+</html>
