@@ -394,52 +394,83 @@ Save Website
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
-const SUPABASE_URL = "https://gldbfztlxnkoqwojexjp.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsZGJmenRseG5rb3F3b2pleGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjEwODEsImV4cCI6MjA5NTY5NzA4MX0.FkTob0CX1yoJq1kf6mZdJIe9kfFBEHLO3wQ_L5uNmzo";
+const SUPABASE_URL =
+"https://gldbfztlxnkoqwojexjp.supabase.co";
 
-const supabase = window.supabase.createClient(
+const SUPABASE_ANON_KEY =
+"YOUR_ANON_KEY_HERE";
+
+/*
+Use a different variable name.
+This completely avoids conflicts.
+*/
+
+const db = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_ANON_KEY
 );
 
 let websites = [];
 
-async function uploadFile(file,path){
+/* ---------------- FILE UPLOAD ---------------- */
 
-const filename =
-Date.now() + "_" + file.name;
+async function uploadFile(file, folder){
 
-const fullPath =
-path + "/" + filename;
+try{
+
+const fileName =
+`${Date.now()}_${file.name}`;
+
+const filePath =
+`${folder}/${fileName}`;
 
 const { error } =
-await supabase.storage
+await db.storage
 .from("website-files")
-.upload(fullPath,file);
-
-if(error) throw error;
-
-const { data } =
-supabase.storage
-.from("website-files")
-.getPublicUrl(fullPath);
-
-return data.publicUrl;
-
-}
-
-async function loadWebsites(){
-
-const { data,error } =
-await supabase
-.from("websites")
-.select("*")
-.order("created_at",{ascending:false});
+.upload(filePath, file);
 
 if(error){
 console.error(error);
+alert(error.message);
+throw error;
+}
+
+const { data } =
+db.storage
+.from("website-files")
+.getPublicUrl(filePath);
+
+return data.publicUrl;
+
+}catch(err){
+
+console.error(err);
+throw err;
+
+}
+
+}
+
+/* ---------------- LOAD WEBSITES ---------------- */
+
+async function loadWebsites(){
+
+try{
+
+const { data, error } =
+await db
+.from("websites")
+.select("*")
+.order("created_at", {
+ascending:false
+});
+
+if(error){
+console.error(error);
+alert(error.message);
 return;
 }
 
@@ -448,65 +479,105 @@ websites = data || [];
 renderCards();
 updateStats();
 
+}catch(err){
+
+console.error(err);
+
 }
+
+}
+
+/* ---------------- STATS ---------------- */
 
 function updateStats(){
 
-document.getElementById("totalSites").innerText =
+document.getElementById("totalSites").textContent =
 websites.length;
 
-document.getElementById("storageCount").innerText =
+document.getElementById("storageCount").textContent =
 websites.length;
 
-const cats =
-new Set(websites.map(x=>x.category));
+const categories =
+new Set(websites.map(item => item.category));
 
-document.getElementById("totalCategories").innerText =
-cats.size;
+document.getElementById("totalCategories").textContent =
+categories.size;
 
 }
+
+/* ---------------- CARDS ---------------- */
 
 function renderCards(search=""){
 
 const container =
 document.getElementById("cardsContainer");
 
-container.innerHTML="";
+container.innerHTML = "";
 
 const filtered =
-websites.filter(site =>
-site.name.toLowerCase().includes(search.toLowerCase()) ||
-site.category.toLowerCase().includes(search.toLowerCase())
+websites.filter(site => {
+
+const q =
+search.toLowerCase();
+
+return (
+site.name.toLowerCase().includes(q) ||
+site.category.toLowerCase().includes(q)
 );
 
-filtered.forEach(site=>{
+});
+
+if(filtered.length === 0){
+
+container.innerHTML =
+`<p style="padding:20px;color:#94a3b8;">
+No websites found
+</p>`;
+
+return;
+
+}
+
+filtered.forEach(site => {
 
 container.innerHTML += `
 <div class="site-card">
 
-<img src="${site.thumbnail_url}">
+<img
+src="${site.thumbnail_url || ''}"
+alt="${site.name}"
+>
 
 <div class="card-content">
 
-<div class="card-title">${site.name}</div>
+<div class="card-title">
+${site.name}
+</div>
 
-<div class="card-category">${site.category}</div>
+<div class="card-category">
+${site.category}
+</div>
 
-<div class="card-desc">${site.description || ""}</div>
+<div class="card-desc">
+${site.description || ""}
+</div>
 
 <div class="card-actions">
 
-<button class="visit-btn"
+<button
+class="visit-btn"
 onclick="window.open('${site.live_url}','_blank')">
 Visit
 </button>
 
-<button class="edit-btn"
+<button
+class="edit-btn"
 onclick="editWebsite('${site.id}')">
 Edit
 </button>
 
-<button class="delete-btn"
+<button
+class="delete-btn"
 onclick="deleteWebsite('${site.id}')">
 Delete
 </button>
@@ -522,24 +593,44 @@ Delete
 
 }
 
+/* ---------------- DELETE ---------------- */
+
 async function deleteWebsite(id){
 
-if(!confirm("Delete website?"))
+if(!confirm("Delete Website?"))
 return;
 
-await supabase
+try{
+
+const { error } =
+await db
 .from("websites")
 .delete()
-.eq("id",id);
+.eq("id", id);
+
+if(error){
+alert(error.message);
+return;
+}
 
 loadWebsites();
 
+}catch(err){
+
+console.error(err);
+
 }
+
+}
+
+/* ---------------- EDIT ---------------- */
 
 function editWebsite(id){
 
 const site =
-websites.find(x=>x.id===id);
+websites.find(x => x.id === id);
+
+if(!site) return;
 
 document.getElementById("websiteId").value =
 site.id;
@@ -551,7 +642,7 @@ document.getElementById("category").value =
 site.category;
 
 document.getElementById("description").value =
-site.description;
+site.description || "";
 
 document.getElementById("liveUrl").value =
 site.live_url;
@@ -563,10 +654,11 @@ behavior:"smooth"
 
 }
 
+/* ---------------- FORM ---------------- */
+
 document
 .getElementById("websiteForm")
-.addEventListener("submit",
-async e=>{
+.addEventListener("submit", async (e)=>{
 
 e.preventDefault();
 
@@ -576,7 +668,7 @@ const id =
 document.getElementById("websiteId").value;
 
 const name =
-document.getElementById("name").value;
+document.getElementById("name").value.trim();
 
 const category =
 document.getElementById("category").value;
@@ -587,35 +679,33 @@ document.getElementById("description").value;
 const live_url =
 document.getElementById("liveUrl").value;
 
-let thumbnail_url;
-let zip_url;
-
 const thumb =
 document.getElementById("thumbnail").files[0];
 
 const zip =
 document.getElementById("zipFile").files[0];
 
+let thumbnail_url;
+let zip_url;
+
 if(!id){
 
 if(!thumb || !zip){
-alert("Upload Thumbnail & ZIP");
+
+alert("Please upload thumbnail and zip file");
+
 return;
+
 }
 
 thumbnail_url =
-await uploadFile(
-thumb,
-"thumbnails"
-);
+await uploadFile(thumb,"thumbnails");
 
 zip_url =
-await uploadFile(
-zip,
-"zips"
-);
+await uploadFile(zip,"zips");
 
-await supabase
+const { error } =
+await db
 .from("websites")
 .insert([{
 name,
@@ -626,10 +716,15 @@ zip_url,
 live_url
 }]);
 
+if(error){
+alert(error.message);
+return;
+}
+
 }else{
 
 const site =
-websites.find(x=>x.id===id);
+websites.find(x => x.id === id);
 
 thumbnail_url =
 site.thumbnail_url;
@@ -657,7 +752,8 @@ zip,
 
 }
 
-await supabase
+const { error } =
+await db
 .from("websites")
 .update({
 name,
@@ -669,6 +765,11 @@ live_url
 })
 .eq("id",id);
 
+if(error){
+alert(error.message);
+return;
+}
+
 }
 
 document
@@ -677,11 +778,11 @@ document
 
 document
 .getElementById("websiteId")
-.value="";
-
-loadWebsites();
+.value = "";
 
 alert("Saved Successfully");
+
+await loadWebsites();
 
 }catch(err){
 
@@ -692,16 +793,20 @@ alert(err.message);
 
 });
 
+/* ---------------- SEARCH ---------------- */
+
 document
 .getElementById("searchInput")
-.addEventListener("input",
-e=>{
+.addEventListener("input",(e)=>{
+
 renderCards(e.target.value);
+
 });
+
+/* ---------------- START ---------------- */
 
 loadWebsites();
 
 </script>
-
 </body>
 </html>
