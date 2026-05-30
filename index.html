@@ -1338,22 +1338,13 @@ ${site.description || ''}
 
 <div class="card-actions">
 
-<button
-class="open-btn"
-onclick="window.open('${site.live_url || '#'}','_blank')">
-
-Open Website
-
+<button class="open-btn" data-url="${site.live_url || ''}">
+  Open Website
 </button>
 
-<button
-class="download-btn"
-onclick="window.open('${site.zip_url || '#'}','_blank')">
-
-Download ZIP
-
+<button class="download-btn" data-url="${site.zip_url || ''}">
+  Download ZIP
 </button>
-
 </div>
 
 </div>
@@ -1405,7 +1396,26 @@ loadWebsites();
   function goAdmin(){
   window.location.href = "login.html";
 }
+function openSafe(url){
+  if(!url || url === "#"){
+    alert("Link not available for this item");
+    return;
+  }
+  window.open(url, "_blank");
+}
+   document.addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-url]");
+  if (!btn) return;
 
+  const url = btn.dataset.url;
+
+  if (!url || url.trim() === "" || url === "#") {
+    alert("Link not available");
+    return;
+  }
+
+  window.open(url.trim(), "_blank");
+});
 </script>
 
 </body>
