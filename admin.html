@@ -397,17 +397,11 @@ Save Website
 
 <script>
 
-const SUPABASE_URL =
-"https://gldbfztlxnkoqwojexjp.supabase.co";
+const SUPABASE_URL = "https://gldbfztlxnkoqwojexjp.supabase.co";
 
-const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsZGJmenRseG5rb3F3b2pleGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjEwODEsImV4cCI6MjA5NTY5NzA4MX0.FkTob0CX1yoJq1kf6mZdJIe9kfFBEHLO3wQ_L5uNmzo";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsZGJmenRseG5rb3F3b2pleGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxMjEwODEsImV4cCI6MjA5NTY5NzA4MX0.FkTob0CX1yoJq1kf6mZdJIe9kfFBEHLO3wQ_L5uNmzo";
 
-/*
-Use a different variable name.
-This completely avoids conflicts.
-*/
-
+/* Use db instead of supabase to avoid conflicts */
 const db = window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_ANON_KEY
@@ -415,17 +409,17 @@ SUPABASE_ANON_KEY
 
 let websites = [];
 
-/* ---------------- FILE UPLOAD ---------------- */
+/* ---------- FILE UPLOAD ---------- */
 
 async function uploadFile(file, folder){
 
 try{
 
 const fileName =
-`${Date.now()}_${file.name}`;
+Date.now() + "_" + file.name;
 
 const filePath =
-`${folder}/${fileName}`;
+folder + "/" + fileName;
 
 const { error } =
 await db.storage
@@ -454,7 +448,7 @@ throw err;
 
 }
 
-/* ---------------- LOAD WEBSITES ---------------- */
+/* ---------- LOAD DATA ---------- */
 
 async function loadWebsites(){
 
@@ -462,7 +456,7 @@ try{
 
 const { data, error } =
 await db
-.from("websites")
+.from("website-files")
 .select("*")
 .order("created_at", {
 ascending:false
@@ -487,7 +481,7 @@ console.error(err);
 
 }
 
-/* ---------------- STATS ---------------- */
+/* ---------- STATS ---------- */
 
 function updateStats(){
 
@@ -498,16 +492,16 @@ document.getElementById("storageCount").textContent =
 websites.length;
 
 const categories =
-new Set(websites.map(item => item.category));
+new Set(websites.map(x => x.category));
 
 document.getElementById("totalCategories").textContent =
 categories.size;
 
 }
 
-/* ---------------- CARDS ---------------- */
+/* ---------- RENDER ---------- */
 
-function renderCards(search=""){
+function renderCards(search = ""){
 
 const container =
 document.getElementById("cardsContainer");
@@ -521,8 +515,15 @@ const q =
 search.toLowerCase();
 
 return (
-site.name.toLowerCase().includes(q) ||
-site.category.toLowerCase().includes(q)
+(site.name || "")
+.toLowerCase()
+.includes(q)
+
+||
+
+(site.category || "")
+.toLowerCase()
+.includes(q)
 );
 
 });
@@ -530,9 +531,7 @@ site.category.toLowerCase().includes(q)
 if(filtered.length === 0){
 
 container.innerHTML =
-`<p style="padding:20px;color:#94a3b8;">
-No websites found
-</p>`;
+"<p style='padding:20px'>No websites found</p>";
 
 return;
 
@@ -543,23 +542,20 @@ filtered.forEach(site => {
 container.innerHTML += `
 <div class="site-card">
 
-<img
-src="${site.thumbnail_url || ''}"
-alt="${site.name}"
->
+<img src="${site.thumbnail_url || ''}" alt="">
 
 <div class="card-content">
 
 <div class="card-title">
-${site.name}
+${site.name || ''}
 </div>
 
 <div class="card-category">
-${site.category}
+${site.category || ''}
 </div>
 
 <div class="card-desc">
-${site.description || ""}
+${site.description || ''}
 </div>
 
 <div class="card-actions">
@@ -593,42 +589,38 @@ Delete
 
 }
 
-/* ---------------- DELETE ---------------- */
+/* ---------- DELETE ---------- */
 
 async function deleteWebsite(id){
 
-if(!confirm("Delete Website?"))
+if(!confirm("Delete website?"))
 return;
-
-try{
 
 const { error } =
 await db
-.from("websites")
+.from("website-files")
 .delete()
 .eq("id", id);
 
 if(error){
+
+console.error(error);
 alert(error.message);
+
 return;
+
 }
 
 loadWebsites();
 
-}catch(err){
-
-console.error(err);
-
 }
 
-}
-
-/* ---------------- EDIT ---------------- */
+/* ---------- EDIT ---------- */
 
 function editWebsite(id){
 
 const site =
-websites.find(x => x.id === id);
+websites.find(x => x.id == id);
 
 if(!site) return;
 
@@ -636,16 +628,16 @@ document.getElementById("websiteId").value =
 site.id;
 
 document.getElementById("name").value =
-site.name;
+site.name || "";
 
 document.getElementById("category").value =
-site.category;
+site.category || "";
 
 document.getElementById("description").value =
 site.description || "";
 
 document.getElementById("liveUrl").value =
-site.live_url;
+site.live_url || "";
 
 window.scrollTo({
 top:0,
@@ -654,7 +646,7 @@ behavior:"smooth"
 
 }
 
-/* ---------------- FORM ---------------- */
+/* ---------- SAVE ---------- */
 
 document
 .getElementById("websiteForm")
@@ -668,7 +660,7 @@ const id =
 document.getElementById("websiteId").value;
 
 const name =
-document.getElementById("name").value.trim();
+document.getElementById("name").value;
 
 const category =
 document.getElementById("category").value;
@@ -688,25 +680,33 @@ document.getElementById("zipFile").files[0];
 let thumbnail_url;
 let zip_url;
 
+/* NEW RECORD */
+
 if(!id){
 
 if(!thumb || !zip){
 
-alert("Please upload thumbnail and zip file");
+alert("Upload Thumbnail & ZIP");
 
 return;
 
 }
 
 thumbnail_url =
-await uploadFile(thumb,"thumbnails");
+await uploadFile(
+thumb,
+"thumbnails"
+);
 
 zip_url =
-await uploadFile(zip,"zips");
+await uploadFile(
+zip,
+"zips"
+);
 
 const { error } =
 await db
-.from("websites")
+.from("website-files")
 .insert([{
 name,
 category,
@@ -717,14 +717,22 @@ live_url
 }]);
 
 if(error){
+
+console.error(error);
 alert(error.message);
+
 return;
+
 }
 
-}else{
+}
+
+/* UPDATE */
+
+else{
 
 const site =
-websites.find(x => x.id === id);
+websites.find(x => x.id == id);
 
 thumbnail_url =
 site.thumbnail_url;
@@ -754,7 +762,7 @@ zip,
 
 const { error } =
 await db
-.from("websites")
+.from("website-files")
 .update({
 name,
 category,
@@ -763,11 +771,15 @@ thumbnail_url,
 zip_url,
 live_url
 })
-.eq("id",id);
+.eq("id", id);
 
 if(error){
+
+console.error(error);
 alert(error.message);
+
 return;
+
 }
 
 }
@@ -793,17 +805,19 @@ alert(err.message);
 
 });
 
-/* ---------------- SEARCH ---------------- */
+/* ---------- SEARCH ---------- */
 
 document
 .getElementById("searchInput")
-.addEventListener("input",(e)=>{
+.addEventListener("input", e => {
 
-renderCards(e.target.value);
+renderCards(
+e.target.value
+);
 
 });
 
-/* ---------------- START ---------------- */
+/* ---------- START ---------- */
 
 loadWebsites();
 
