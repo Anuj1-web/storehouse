@@ -12,42 +12,59 @@
 
 <style>
 
-/* =========================
-   ULTRA PREMIUM VAULT v4
-   3D MOTION + GLASS + PARALLAX READY UI
-========================= */
+
+
+/* =========================================================
+   DESIGN SYSTEM (TOKENS)
+   ========================================================= */
 
 :root{
 
 --bg:#050505;
---bg2:#0b0b0d;
---bg3:#111114;
+--bg2:#0a0a0d;
+--bg3:#111116;
 
 --gold:#d6b36a;
---gold-light:#f4dca2;
-
---gradient:linear-gradient(135deg,#d6b36a,#f4dca2,#4f7cff);
+--gold2:#f5d79a;
+--blue:#4f7cff;
 
 --text:#ffffff;
---muted:#b5b5bc;
+--muted:#b4b6c2;
 
---glass:rgba(255,255,255,.05);
---glass-strong:rgba(255,255,255,.08);
+--glass:rgba(255,255,255,.035);
+--glass2:rgba(255,255,255,.06);
 
---border:rgba(214,179,106,.18);
+--border:rgba(214,179,106,.14);
 
---shadow:0 25px 80px rgba(0,0,0,.65);
---shadow-soft:0 10px 30px rgba(0,0,0,.35);
+--shadow:0 40px 120px rgba(0,0,0,.7);
+--shadow-soft:0 10px 35px rgba(0,0,0,.35);
 
---radius:16px;
+--radius:20px;
+
+--ease:cubic-bezier(.4,0,.2,1);
+
+--gradient:
+linear-gradient(135deg,#d6b36a,#f5d79a,#4f7cff);
+
+--space-1:6px;
+--space-2:10px;
+--space-3:14px;
+--space-4:18px;
+--space-5:24px;
+--space-6:32px;
+--space-7:48px;
+
 }
 
-/* RESET */
+/* =========================================================
+   RESET + BASE
+   ========================================================= */
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Inter',sans-serif;
+font-family:system-ui,-apple-system,Segoe UI,Inter;
 }
 
 html{
@@ -55,45 +72,69 @@ scroll-behavior:smooth;
 }
 
 body{
-background:linear-gradient(180deg,#050505,#0b0b0d,#111114);
+background:
+radial-gradient(circle at 20% 0%,rgba(214,179,106,.10),transparent 40%),
+radial-gradient(circle at 80% 10%,rgba(79,124,255,.12),transparent 45%),
+linear-gradient(180deg,var(--bg),var(--bg2),var(--bg3));
+
 color:var(--text);
 overflow-x:hidden;
-perspective:1200px;
+min-height:100vh;
 }
 
-/* =========================
-   BACKGROUND (PARALLAX READY LAYERS)
-========================= */
+/* =========================================================
+   BACKGROUND DEPTH LAYERS (SUBTLE NOT NOISY)
+   ========================================================= */
 
 body::before{
 content:"";
 position:fixed;
-inset:-30%;
+inset:-40%;
 background:
-radial-gradient(circle at 15% 20%,rgba(214,179,106,.14),transparent 35%),
-radial-gradient(circle at 85% 10%,rgba(79,124,255,.12),transparent 40%),
-radial-gradient(circle at 50% 90%,rgba(255,255,255,.05),transparent 45%);
+radial-gradient(circle at 30% 20%,rgba(214,179,106,.12),transparent 45%),
+radial-gradient(circle at 70% 10%,rgba(79,124,255,.10),transparent 50%),
+radial-gradient(circle at 50% 80%,rgba(255,255,255,.04),transparent 55%);
 z-index:-2;
-transform:translateZ(-1px) scale(1.2);
-animation:floatBG 12s ease-in-out infinite alternate;
+animation:float 18s ease-in-out infinite alternate;
 }
 
-@keyframes floatBG{
-0%{transform:translateY(0) scale(1.2);}
-100%{transform:translateY(-20px) scale(1.25);}
+@keyframes float{
+0%{transform:translateY(0);}
+100%{transform:translateY(-25px);}
 }
 
-/* CONTAINER */
+/* subtle particles */
+body::after{
+content:"";
+position:fixed;
+inset:0;
+background-image:radial-gradient(#ffffff10 1px,transparent 1px);
+background-size:3px 3px;
+opacity:.06;
+animation:move 90s linear infinite;
+z-index:-1;
+}
+
+@keyframes move{
+from{transform:translateY(0);}
+to{transform:translateY(-1200px);}
+}
+
+/* =========================================================
+   LAYOUT CONTAINER
+   ========================================================= */
+
 .container{
-width:min(1550px,92%);
+width:min(1400px,92%);
 margin:auto;
 }
 
-/* =========================
-   NAVBAR (GLASS + DEPTH)
-========================= */
+/* =========================================================
+   HEADER (FIXED — NOT A BOX, BLENDED INTO SITE)
+   ========================================================= */
 
 .navbar{
+
 position:sticky;
 top:0;
 z-index:1000;
@@ -102,81 +143,76 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 
-padding:14px 0;
+padding:16px 0;
 
-backdrop-filter:blur(12px);
-background:rgba(0,0,0,.25);
-border-bottom:1px solid rgba(255,255,255,.06);
+background:transparent; /* IMPORTANT: no box look */
+
+backdrop-filter:blur(18px) saturate(160%);
+
+border-bottom:1px solid rgba(255,255,255,.04);
+
+transition:all .35s var(--ease);
+
+}
+
+/* only appears on scroll */
+.navbar.scrolled{
+background:rgba(5,5,5,.65);
+border-bottom:1px solid rgba(255,255,255,.08);
+box-shadow:0 10px 40px rgba(0,0,0,.4);
 }
 
 .logo{
-font-size:28px;
+font-size:26px;
 font-weight:900;
 background:var(--gradient);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-letter-spacing:.5px;
-transition:.3s;
+letter-spacing:-.5px;
 }
 
-.logo:hover{
-transform:scale(1.05);
-}
+/* =========================================================
+   BUTTON SYSTEM
+   ========================================================= */
 
-/* BUTTON */
 .btn{
-padding:12px 18px;
-border-radius:14px;
 border:none;
 cursor:pointer;
+border-radius:14px;
 font-weight:700;
-transition:.3s;
+transition:all .3s var(--ease);
+position:relative;
+overflow:hidden;
 }
 
 .btn-primary{
+padding:12px 18px;
 background:var(--gradient);
 color:#000;
-box-shadow:0 10px 25px rgba(214,179,106,.25);
 }
 
 .btn-primary:hover{
-transform:translateY(-2px) scale(1.02);
+transform:translateY(-3px) scale(1.02);
 }
 
-/* =========================
-   HERO (CLEAN + DEPTH)
-========================= */
+/* =========================================================
+   HERO (COMPACT + ABOVE FOLD CONTROL)
+   ========================================================= */
 
 .hero{
-padding:25px 0 15px;
+padding:16px 0 8px;
 text-align:center;
-transform-style:preserve-3d;
-}
 
-.hero-badge{
-display:inline-flex;
-padding:8px 14px;
-font-size:11px;
-border-radius:999px;
+max-height:46vh; /* critical mobile visibility fix */
 
-background:rgba(255,255,255,.04);
-border:1px solid rgba(214,179,106,.25);
-
-backdrop-filter:blur(10px);
-margin-bottom:10px;
-transition:.3s;
-}
-
-.hero-badge:hover{
-transform:translateY(-2px);
+overflow:hidden;
 }
 
 .hero h1{
-font-size:34px;
-line-height:1.1;
+font-size:clamp(1.8rem,5vw,4.8rem);
 font-weight:900;
-margin-bottom:10px;
-transform:translateZ(20px);
+line-height:1.05;
+letter-spacing:-1px;
 }
 
 .hero h1 span{
@@ -186,125 +222,101 @@ background:var(--gradient);
 }
 
 .hero p{
+margin-top:10px;
 font-size:13px;
-line-height:1.6;
 color:var(--muted);
-max-width:600px;
-margin:auto;
+max-width:680px;
+margin-inline:auto;
+line-height:1.6;
 }
 
-/* =========================
-   SEARCH (FIXED VISIBILITY + PREMIUM GLASS)
-========================= */
-
-.search-section{
-margin:15px 0 20px;
-}
+/* =========================================================
+   SEARCH (GLASS CORE)
+   ========================================================= */
 
 .search-box{
+margin-top:14px;
 padding:14px;
+
+background:var(--glass);
+
+border:1px solid var(--border);
+
 border-radius:18px;
 
-background:rgba(255,255,255,.04);
-border:1px solid rgba(214,179,106,.18);
+backdrop-filter:blur(24px);
 
 box-shadow:var(--shadow-soft);
-backdrop-filter:blur(14px);
 
-transition:.3s;
-}
-
-.search-box:hover{
-transform:translateY(-2px);
 }
 
 .search-input{
 width:100%;
-padding:14px;
+height:52px;
 
 border-radius:14px;
+
 border:1px solid rgba(255,255,255,.08);
 
 background:rgba(0,0,0,.35);
 
-color:white;
-font-size:14px;
+color:#fff;
+
+padding:0 16px;
+
 outline:none;
 
-transition:.3s;
+transition:.3s var(--ease);
 }
 
 .search-input:focus{
 border-color:rgba(214,179,106,.5);
-box-shadow:0 0 0 3px rgba(214,179,106,.12);
+box-shadow:0 0 0 4px rgba(214,179,106,.12);
+transform:translateY(-1px);
 }
 
-/* =========================
-   CATEGORY (FIXED FADED ISSUE + STRONG CONTRAST)
-========================= */
+/* =========================================================
+   CATEGORY CHIPS (HORIZONTAL UX)
+   ========================================================= */
 
 .categories{
 display:flex;
 gap:10px;
 overflow-x:auto;
-padding:12px 2px;
-
+padding:10px 0;
 scroll-snap-type:x mandatory;
 }
 
 .category-btn{
-white-space:nowrap;
+flex:0 0 auto;
 padding:10px 14px;
 border-radius:999px;
 
-border:1px solid rgba(214,179,106,.25);
-background:rgba(255,255,255,.05);
+background:rgba(255,255,255,.03);
 
-font-size:12px;
-font-weight:600;
+border:1px solid rgba(214,179,106,.18);
+
 color:#fff;
-
-cursor:pointer;
-transition:.3s ease;
-
-backdrop-filter:blur(10px);
+font-size:12px;
 
 scroll-snap-align:start;
-opacity:1; /* FIXED FADE ISSUE */
+
+transition:.3s var(--ease);
 }
 
 .category-btn:hover{
-transform:translateY(-3px) scale(1.05);
-background:rgba(214,179,106,.18);
-border-color:rgba(214,179,106,.6);
-box-shadow:0 10px 25px rgba(0,0,0,.4);
+transform:translateY(-2px);
+background:rgba(214,179,106,.12);
 }
 
 .category-btn.active{
 background:var(--gradient);
 color:#000;
-border:none;
-transform:scale(1.05);
-box-shadow:0 12px 30px rgba(214,179,106,.3);
 }
 
-/* =========================
-   SECTION TITLE
-========================= */
-
-.section-title{
-font-size:22px;
-font-weight:900;
-margin:15px 0;
-
-background:var(--gradient);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-/* =========================
-   CARDS (3D PREMIUM DEPTH)
-========================= */
+/* =========================================================
+   GRID SYSTEM
+   ========================================================= */
 
 .cards{
 display:grid;
@@ -313,27 +325,56 @@ gap:16px;
 padding-bottom:60px;
 }
 
+/* =========================================================
+   CARD SYSTEM (REAL PREMIUM LAYERED DEPTH)
+   ========================================================= */
+
 .card{
-border-radius:18px;
-
-background:rgba(255,255,255,.04);
-border:1px solid rgba(214,179,106,.14);
-
+position:relative;
+border-radius:22px;
 overflow:hidden;
 
-transition:.4s ease;
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(214,179,106,.10);
+
+backdrop-filter:blur(18px);
+
 box-shadow:var(--shadow-soft);
 
-transform-style:preserve-3d;
+transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+
+will-change:transform;
 }
 
+/* subtle glow edge */
+.card::before{
+content:"";
+position:absolute;
+inset:0;
+
+background:
+linear-gradient(135deg,
+rgba(214,179,106,.10),
+transparent,
+rgba(79,124,255,.08)
+);
+
+opacity:.6;
+
+pointer-events:none;
+}
+
+/* hover lift */
 .card:hover{
-transform:translateY(-10px) rotateX(4deg) rotateY(-4deg);
+transform:translateY(-10px) scale(1.015);
 box-shadow:var(--shadow);
 }
 
+/* IMAGE */
 .card-image{
-height:180px;
+height:200px;
+position:relative;
 overflow:hidden;
 }
 
@@ -341,24 +382,23 @@ overflow:hidden;
 width:100%;
 height:100%;
 object-fit:cover;
-transition:.6s ease;
+transition:transform .8s var(--ease);
 }
 
 .card:hover img{
-transform:scale(1.08);
+transform:scale(1.12);
 }
 
+.card-image::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,transparent,rgba(0,0,0,.5));
+}
+
+/* BODY */
 .card-body{
-padding:14px;
-}
-
-.category{
-display:inline-block;
-font-size:11px;
-padding:6px 10px;
-border-radius:999px;
-background:rgba(214,179,106,.15);
-color:var(--gold-light);
+padding:16px;
 }
 
 .card-title{
@@ -368,32 +408,52 @@ margin:8px 0;
 }
 
 .card-desc{
-font-size:12px;
+font-size:13px;
 color:var(--muted);
-line-height:1.5;
+line-height:1.6;
 margin-bottom:12px;
 }
 
-/* =========================
-   ACTION BUTTONS (NO OVERLAP + CLEAN GRID)
-========================= */
+/* TAG */
+.category{
+font-size:11px;
+padding:6px 10px;
+border-radius:999px;
+background:rgba(214,179,106,.12);
+color:var(--gold2);
+}
+
+/* =========================================================
+   BUTTON ROW (ZERO OVERLAP GUARANTEE)
+   ========================================================= */
 
 .card-actions{
 display:flex;
 gap:10px;
+width:100%;
 }
 
 .open-btn,
 .download-btn{
 flex:1;
-height:42px;
+min-width:0;
+
+height:44px;
+
+display:flex;
+align-items:center;
+justify-content:center;
 
 border-radius:12px;
+
 font-size:12px;
 font-weight:700;
 
-cursor:pointer;
-transition:.3s;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+transition:.3s var(--ease);
 }
 
 .open-btn{
@@ -402,59 +462,80 @@ color:#000;
 border:none;
 }
 
-.open-btn:hover{
-transform:translateY(-2px);
-}
-
 .download-btn{
-background:rgba(255,255,255,.04);
-color:white;
-border:1px solid rgba(255,255,255,.10);
-backdrop-filter:blur(10px);
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.1);
+color:#fff;
 }
 
+.open-btn:hover,
 .download-btn:hover{
-background:rgba(255,255,255,.08);
 transform:translateY(-2px);
 }
 
-/* =========================
+/* =========================================================
    FOOTER
-========================= */
+   ========================================================= */
 
 .footer{
 padding:40px 0;
 text-align:center;
 font-size:12px;
 color:#888;
-border-top:1px solid rgba(214,179,106,.10);
+border-top:1px solid rgba(214,179,106,.12);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   ANIMATIONS (SUBTLE ONLY)
+   ========================================================= */
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(18px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.hero,.search-box,.card{
+animation:fadeUp .6s var(--ease);
+}
+
+/* =========================================================
+   RESPONSIVE SYSTEM
+   ========================================================= */
 
 @media(min-width:768px){
 
-.hero h1{
-font-size:56px;
+.hero{
+max-height:none;
+padding:60px 0 30px;
 }
 
 .cards{
 grid-template-columns:repeat(2,1fr);
 }
 
+.hero h1{
+font-size:56px;
+}
+
 }
 
 @media(min-width:1100px){
-
-.cards{
-grid-template-columns:repeat(3,1fr);
+.cards{grid-template-columns:repeat(3,1fr);}
 }
+
+@media(min-width:1500px){
+.cards{grid-template-columns:repeat(4,1fr);}
+}
+
+@media(max-width:768px){
+
+.hero h1{font-size:30px;}
+.card-image{height:170px;}
 
 }
 
 </style>
+
 </head>
 <body>
 
