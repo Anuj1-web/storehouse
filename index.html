@@ -14,7 +14,7 @@
 
 /* =========================
    ULTRA PREMIUM WEBSITE VAULT
-   OBSIDIAN + GOLD + SAPPHIRE
+   OBSIDIAN + GOLD + SAPPHIRE (CLICK SAFE)
 ========================= */
 
 :root{
@@ -53,10 +53,7 @@ linear-gradient(
 
 }
 
-/* =========================
-   RESET
-========================= */
-
+/* RESET */
 *{
 margin:0;
 padding:0;
@@ -86,13 +83,18 @@ position:relative;
 }
 
 /* =========================
-   LUXURY BACKGROUND
+   SAFE BACKGROUND (NO CLICK BLOCKING)
 ========================= */
+
+body::before,
+body::after{
+pointer-events:none !important;
+z-index:-1;
+}
 
 body::before{
 
 content:"";
-
 position:fixed;
 inset:-15%;
 
@@ -116,10 +118,7 @@ rgba(214,179,106,.08),
 transparent 35%
 );
 
-animation:
-premiumFlow 18s ease-in-out infinite alternate;
-
-pointer-events:none;
+animation:premiumFlow 18s ease-in-out infinite alternate;
 z-index:-2;
 
 }
@@ -127,7 +126,6 @@ z-index:-2;
 body::after{
 
 content:"";
-
 position:fixed;
 inset:0;
 
@@ -139,28 +137,16 @@ transparent
 );
 
 backdrop-filter:blur(120px);
-
-pointer-events:none;
 z-index:-1;
 
 }
 
 @keyframes premiumFlow{
-
-0%{
-transform:translate(0,0) scale(1);
+0%{transform:translate(0,0) scale(1);}
+100%{transform:translate(-2%,2%) scale(1.08);}
 }
 
-100%{
-transform:translate(-2%,2%) scale(1.08);
-}
-
-}
-
-/* =========================
-   CONTAINER
-========================= */
-
+/* CONTAINER */
 .container{
 width:min(1550px,92%);
 margin:auto;
@@ -168,935 +154,345 @@ position:relative;
 z-index:2;
 }
 
-/* =========================
-   NAVBAR
-========================= */
-
+/* NAVBAR */
 .navbar{
-
 position:sticky;
 top:0;
-
 z-index:1000;
-
 display:flex;
 justify-content:space-between;
 align-items:center;
-
 padding:22px 0;
-
-background:transparent;
-
-backdrop-filter:none;
-
-border:none;
-
 }
-.logo{
 
+.logo{
 font-size:40px;
 font-weight:900;
 letter-spacing:-1.5px;
-
 background:var(--gradient);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
-text-shadow:
-0 0 30px rgba(214,179,106,.2);
-
-}
-.nav-right{
-display:flex;
-gap:14px;
+text-shadow:0 0 30px rgba(214,179,106,.2);
 }
 
-/* =========================
-   BUTTONS
-========================= */
-
+/* BUTTONS */
 .btn{
-
 border:none;
 cursor:pointer;
 text-decoration:none;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 padding:16px 30px;
-
 border-radius:18px;
-
 font-weight:700;
 font-size:14px;
-
 transition:.45s;
-
+position:relative;
+z-index:5;
 }
 
 .btn-primary{
-
 background:var(--gradient);
-
 color:#050505;
-
-box-shadow:
-0 15px 40px rgba(214,179,106,.25);
-
+box-shadow:0 15px 40px rgba(214,179,106,.25);
 }
 
 .btn-primary:hover{
-
-transform:
-translateY(-4px)
-scale(1.02);
-
-box-shadow:
-0 25px 70px rgba(214,179,106,.35);
-
+transform:translateY(-4px) scale(1.02);
+box-shadow:0 25px 70px rgba(214,179,106,.35);
 }
 
-/* =========================
-   HERO
-========================= */
-
+/* HERO */
 .hero{
 padding:70px 0 90px;
 position:relative;
 text-align:center;
 overflow:hidden;
+z-index:1;
 }
+
 .hero::before{
-
 content:"";
-
 position:absolute;
-
 left:50%;
 top:-250px;
-
 transform:translateX(-50%);
-
 width:950px;
 height:950px;
-
-background:
-
-radial-gradient(
-circle,
-rgba(214,179,106,.12),
-transparent 65%
-);
-
-animation:
-heroPulse 8s ease-in-out infinite;
-
+background:radial-gradient(circle,rgba(214,179,106,.12),transparent 65%);
+animation:heroPulse 8s ease-in-out infinite;
 pointer-events:none;
-
+z-index:0;
 }
 
 @keyframes heroPulse{
-
-0%{
-transform:translateX(-50%) scale(1);
-}
-
-50%{
-transform:translateX(-50%) scale(1.08);
-}
-
-100%{
-transform:translateX(-50%) scale(1);
-}
-
+0%{transform:translateX(-50%) scale(1);}
+50%{transform:translateX(-50%) scale(1.08);}
+100%{transform:translateX(-50%) scale(1);}
 }
 
 .hero-badge{
-
 display:inline-flex;
 align-items:center;
 gap:10px;
-
 padding:14px 24px;
-
 border-radius:999px;
-
-background:
-rgba(255,255,255,.03);
-
-border:
-1px solid rgba(214,179,106,.12);
-
+background:rgba(255,255,255,.03);
+border:1px solid rgba(214,179,106,.12);
 backdrop-filter:blur(20px);
-
 margin-bottom:30px;
-
 font-size:13px;
-
 color:#f4dca2;
-
+position:relative;
+z-index:2;
 }
 
 .hero h1{
-
-font-size:
-clamp(60px,7vw,115px);
-
+font-size:clamp(60px,7vw,115px);
 font-weight:900;
-
 line-height:.95;
-
 letter-spacing:-4px;
-
 margin-bottom:25px;
-
+position:relative;
+z-index:2;
 }
 
 .hero h1 span{
-
 background:var(--gradient);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
 }
 
 .hero p{
-
 max-width:900px;
-
 margin:auto;
-
 font-size:19px;
-
 line-height:1.9;
-
 color:var(--muted);
-
+position:relative;
+z-index:2;
 }
 
-.hero-stats{
-
-margin-top:55px;
-
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-
-}
-
-.hero-stat{
-
-padding:26px 34px;
-
-border-radius:24px;
-
-background:
-rgba(255,255,255,.03);
-
-border:
-1px solid rgba(214,179,106,.08);
-
-backdrop-filter:blur(25px);
-
-min-width:190px;
-
-transition:.4s;
-
-}
-
-.hero-stat:hover{
-
-transform:translateY(-8px);
-
-border-color:
-rgba(214,179,106,.25);
-
-background:
-rgba(255,255,255,.05);
-
-}
-
-.hero-stat h3{
-
-font-size:32px;
-
-margin-bottom:8px;
-
-color:var(--gold-light);
-
-}
-
-.hero-stat p{
-
-font-size:13px;
-color:var(--muted);
-
-}
-
-/* =========================
-   SEARCH
-========================= */
-
+/* SEARCH */
 .search-section{
-
-margin:
-40px 0
-80px;
-
+margin:40px 0 80px;
+position:relative;
+z-index:2;
 }
 
 .search-box{
-
 padding:28px;
-
 border-radius:32px;
-
-background:
-rgba(255,255,255,.03);
-
-border:
-1px solid rgba(214,179,106,.08);
-
+background:rgba(255,255,255,.03);
+border:1px solid rgba(214,179,106,.08);
 backdrop-filter:blur(30px);
-
 box-shadow:var(--shadow);
-
+position:relative;
+z-index:2;
 }
 
 .search-input{
-
 width:100%;
-
 padding:22px 24px;
-
 border-radius:20px;
-
-background:
-rgba(255,255,255,.03);
-
-border:
-1px solid rgba(255,255,255,.06);
-
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.06);
 outline:none;
-
 font-size:15px;
-
 color:white;
-
-transition:.4s;
-
 }
 
 .search-input:focus{
-
-border-color:
-rgba(214,179,106,.35);
-
-box-shadow:
-0 0 35px rgba(214,179,106,.12);
-
+border-color:rgba(214,179,106,.35);
+box-shadow:0 0 35px rgba(214,179,106,.12);
 }
 
-.search-input::placeholder{
+.search-input::placeholder{color:#888;}
 
-color:#888;
-
-}
-
-/* =========================
-   CATEGORY BUTTONS
-========================= */
-
+/* CATEGORIES */
 .categories{
-
 display:flex;
 flex-wrap:wrap;
-
 gap:12px;
-
 margin-top:22px;
-
 }
 
 .category-btn{
-
 padding:12px 18px;
-
 border-radius:999px;
-
-background:
-rgba(255,255,255,.03);
-
-border:
-1px solid rgba(255,255,255,.06);
-
+border:1px solid rgba(255,255,255,.06);
+background:rgba(255,255,255,.03);
 color:white;
-
 cursor:pointer;
-
 font-weight:600;
-
 transition:.35s;
-
+position:relative;
+z-index:2;
 }
 
 .category-btn:hover,
 .category-btn.active{
-
 background:var(--gradient);
-
 color:#050505;
-
 border-color:transparent;
-
-transform:translateY(-2px);
-
 }
 
-/* =========================
-   SECTION TITLE
-========================= */
-
+/* SECTION TITLE */
 .section-title{
-
 font-size:52px;
 font-weight:900;
-
 margin-bottom:35px;
-
 background:var(--gradient);
-
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
-display:inline-block;
-
 }
 
-/* =========================
-   CARDS
-========================= */
-
+/* CARDS */
 .cards{
-
 display:grid;
-
-grid-template-columns:
-repeat(auto-fill,minmax(360px,1fr));
-
+grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
 gap:30px;
-
 padding-bottom:100px;
-
 }
 
+/* SAFE CARD (CLICK PROTECTED) */
 .card{
-
 position:relative;
-
 overflow:hidden;
-
 border-radius:30px;
-
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.04),
-rgba(255,255,255,.02)
-);
-
-border:
-1px solid rgba(214,179,106,.08);
-
+background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+border:1px solid rgba(214,179,106,.08);
 backdrop-filter:blur(30px);
-
 transition:.5s;
-
 box-shadow:var(--shadow);
-
+z-index:1;
 }
 
 .card::before{
-
-content:"";
-
-position:absolute;
-inset:0;
-
-background:
-linear-gradient(
-135deg,
-rgba(214,179,106,.10),
-transparent 40%,
-rgba(79,124,255,.05)
-);
-
-opacity:0;
-
-transition:.5s;
-
-}
-
-.card:hover::before{
-opacity:1;
+pointer-events:none;
 }
 
 .card:hover{
-
-transform:
-translateY(-12px);
-
-border-color:
-rgba(214,179,106,.25);
-
+transform:translateY(-12px);
+border-color:rgba(214,179,106,.25);
 }
 
+/* IMAGE */
 .card-image{
-
 height:250px;
 overflow:hidden;
-
 }
 
 .card-image img{
-
 width:100%;
 height:100%;
-
 object-fit:cover;
-
 transition:1s;
-
 }
 
 .card:hover img{
-
 transform:scale(1.08);
-
 }
 
+/* BODY */
 .card-body{
-
 padding:28px;
-
+position:relative;
+z-index:2;
 }
 
 .category{
-
 display:inline-flex;
-
 padding:8px 15px;
-
 border-radius:999px;
-
-background:
-rgba(214,179,106,.12);
-
+background:rgba(214,179,106,.12);
 color:var(--gold-light);
-
 font-size:12px;
-
 margin-bottom:16px;
-
 }
 
 .card-title{
-
 font-size:26px;
-
 font-weight:800;
-
 margin-bottom:12px;
-
 }
 
 .card-desc{
-
 font-size:14px;
-
 line-height:1.8;
-
 color:var(--muted);
-
 margin-bottom:24px;
-
 }
 
+/* ACTIONS (IMPORTANT FIX) */
 .card-actions{
-
 display:flex;
 gap:12px;
-
+position:relative;
+z-index:5; /* KEY FIX */
 }
 
+/* BUTTONS SAFE */
 .open-btn,
 .download-btn{
-
 flex:1;
-
 height:54px;
-
 border:none;
-
 border-radius:18px;
-
 cursor:pointer;
-
 font-weight:700;
-
 font-size:14px;
-
 transition:.35s;
-
+position:relative;
+z-index:6; /* CRITICAL */
+pointer-events:auto;
 }
 
 .open-btn{
-
 background:var(--gradient);
-
 color:#050505;
-
 }
 
 .download-btn{
-
-background:
-rgba(255,255,255,.03);
-
+background:rgba(255,255,255,.03);
 color:white;
-
-border:
-1px solid rgba(255,255,255,.08);
-
+border:1px solid rgba(255,255,255,.08);
 }
 
 .open-btn:hover,
 .download-btn:hover{
-
-transform:
-translateY(-3px);
-
+transform:translateY(-3px);
 }
 
-/* =========================
-   FOOTER
-========================= */
-
+/* FOOTER */
 .footer{
-
 padding:80px 0;
-
 margin-top:30px;
-
 text-align:center;
-
-border-top:
-1px solid rgba(214,179,106,.08);
-
+border-top:1px solid rgba(214,179,106,.08);
 color:#888;
-
 font-size:14px;
-
 }
 
-/* =========================
-   TABLET
-========================= */
-
+/* RESPONSIVE */
 @media(max-width:992px){
-
-.hero h1{
-font-size:68px;
+.cards{grid-template-columns:repeat(2,1fr);}
+.hero h1{font-size:68px;}
 }
-
-.cards{
-
-grid-template-columns:
-repeat(2,1fr);
-
-}
-
-}
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:768px){
-
-.container{
-width:94%;
-}
-
-/* NAVBAR */
-
-.navbar{
-
-padding:14px 0;
-
-}
-
-.logo{
-
-font-size:28px;
-
-}
-
-.btn{
-
-padding:12px 18px;
-
-font-size:13px;
-
-border-radius:14px;
-
-}
-
-/* HERO */
-
-.hero{
-
-padding:
-55px 0
-25px;
-
-}
-
-.hero::before{
-
-width:500px;
-height:500px;
-
-opacity:.5;
-
-}
-
-.hero-badge{
-
-padding:10px 16px;
-
-font-size:11px;
-
-margin-bottom:16px;
-
-}
-
-.hero h1{
-
-font-size:42px;
-
-line-height:1;
-
-letter-spacing:-2px;
-
-margin-bottom:12px;
-
-}
-
-.hero p{
-
-font-size:14px;
-
-line-height:1.7;
-
-max-width:100%;
-
-}
-
-.hero-stats{
-
-margin-top:25px;
-
-gap:10px;
-
-}
-
-.hero-stat{
-
-width:calc(50% - 5px);
-
-min-width:unset;
-
-padding:18px;
-
-border-radius:18px;
-
-}
-
-.hero-stat h3{
-
-font-size:22px;
-
-}
-
-.hero-stat p{
-
-font-size:11px;
-
-}
-
-/* SEARCH */
-
-.search-section{
-
-margin:
-20px 0
-35px;
-
-}
-
-.search-box{
-
-padding:18px;
-
-border-radius:20px;
-
-}
-
-.search-input{
-
-height:52px;
-
-padding:0 18px;
-
-font-size:14px;
-
-}
-
-/* CATEGORIES */
-
-.categories{
-
-gap:8px;
-
-overflow-x:auto;
-
-flex-wrap:nowrap;
-
-padding-bottom:4px;
-
-}
-
-.categories::-webkit-scrollbar{
-display:none;
-}
-
-.category-btn{
-
-white-space:nowrap;
-
-padding:10px 14px;
-
-font-size:12px;
-
-}
-
-/* TITLE */
-
-.section-title{
-
-font-size:28px;
-
-margin-bottom:20px;
-
-}
-
-/* CARDS */
-
-.cards{
-
-grid-template-columns:1fr;
-
-gap:20px;
-
-padding-bottom:60px;
-
-}
-
-.card{
-
-border-radius:24px;
-
-}
-
-.card-image{
-height:230px;
-}
-
-.card-body{
-padding:18px;
-}
-
-.card-title{
-font-size:20px;
-line-height:1.3;
-}
-
-.card-desc{
-
-font-size:13px;
-
-line-height:1.7;
-
-}
-
-.open-btn,
-.download-btn{
-
-height:48px;
-
-font-size:13px;
-
-padding:0 10px;
-
-}
-.card::after{
-
-content:"";
-
-position:absolute;
-inset:-1px;
-
-border-radius:inherit;
-
-background:
-linear-gradient(
-135deg,
-rgba(214,179,106,.25),
-transparent 35%,
-transparent 65%,
-rgba(79,124,255,.18)
-);
-
-opacity:0;
-
-transition:.5s;
-
-pointer-events:none;
-
-}
-
-.card:hover::after{
-opacity:1;
-}
-/* FOOTER */
-
-.footer{
-
-padding:45px 0;
-
-font-size:13px;
-
-}
-
+.container{width:94%;}
+.cards{grid-template-columns:1fr;}
+.hero h1{font-size:42px;}
+.section-title{font-size:28px;}
+.navbar{flex-direction:column;gap:20px;}
+.footer{padding:45px 0;}
 }
 
 </style>
+</head>
+<body>
 
 <div class="container">
 
@@ -1111,39 +507,19 @@ font-size:13px;
 <section class="hero">
 
 <div class="hero-badge">
-✨ Premium Website Marketplace
+Premium Website Collection
 </div>
 
 <h1>
-Discover Elite
-<br>
-<span>Web Experiences</span>
+Discover Luxury <br>
+<span>Website Templates</span>
 </h1>
 
 <p>
-A luxury collection of modern websites, SaaS dashboards, ecommerce stores,
-landing pages, portfolios and premium UI systems curated for developers,
-designers and businesses.
+Explore a curated vault of premium websites, landing pages,
+dashboards, portfolios, ecommerce projects and modern web experiences.
+Browse, preview and download production-ready projects.
 </p>
-
-<div class="hero-stats">
-
-<div class="hero-stat">
-<h3>500+</h3>
-<p>Premium Templates</p>
-</div>
-
-<div class="hero-stat">
-<h3>50+</h3>
-<p>Categories</p>
-</div>
-
-<div class="hero-stat">
-<h3>24/7</h3>
-<p>Instant Downloads</p>
-</div>
-
-</div>
 
 </section>
 
@@ -1155,20 +531,46 @@ designers and businesses.
 type="text"
 id="searchInput"
 class="search-input"
-placeholder="Search premium websites, dashboards, portfolios..."
+placeholder="Search websites, templates, categories..."
 >
 
 <div class="categories">
 
-<button class="category-btn active" data-category="all">All</button>
-<button class="category-btn" data-category="Business">Business</button>
-<button class="category-btn" data-category="E-Commerce">E-Commerce</button>
-<button class="category-btn" data-category="Portfolio">Portfolio</button>
-<button class="category-btn" data-category="Education">Education</button>
-<button class="category-btn" data-category="Dashboard">Dashboard</button>
-<button class="category-btn" data-category="Tools">Tools</button>
-<button class="category-btn" data-category="Agency">Agency</button>
-<button class="category-btn" data-category="Blog">Blog</button>
+<button class="category-btn active" data-category="all">
+All
+</button>
+
+<button class="category-btn" data-category="Business">
+Business
+</button>
+
+<button class="category-btn" data-category="E-Commerce">
+E-Commerce
+</button>
+
+<button class="category-btn" data-category="Portfolio">
+Portfolio
+</button>
+
+<button class="category-btn" data-category="Education">
+Education
+</button>
+
+<button class="category-btn" data-category="Dashboard">
+Dashboard
+</button>
+
+<button class="category-btn" data-category="Tools">
+Tools
+</button>
+
+<button class="category-btn" data-category="Agency">
+Agency
+</button>
+
+<button class="category-btn" data-category="Blog">
+Blog
+</button>
 
 </div>
 
@@ -1177,17 +579,16 @@ placeholder="Search premium websites, dashboards, portfolios..."
 </section>
 
 <h2 class="section-title">
-Featured Collection
+Featured Websites
 </h2>
 
 <div class="cards" id="cardsContainer"></div>
 
-<footer class="footer">
-© 2026 Website Vault • Crafted for Premium Digital Experiences
-</footer>
-
+<div class="footer">
+© 2026 Website Vault • Premium Website Library
 </div>
 
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
@@ -1338,13 +739,22 @@ ${site.description || ''}
 
 <div class="card-actions">
 
-<button class="open-btn" data-url="${site.live_url}">
-  Open Website
+<button
+class="open-btn"
+onclick="window.open('${site.live_url || '#'}','_blank')">
+
+Open Website
+
 </button>
 
-<button class="download-btn" data-url="${site.zip_url}">
-  Download ZIP
+<button
+class="download-btn"
+onclick="window.open('${site.zip_url || '#'}','_blank')">
+
+Download ZIP
+
 </button>
+
 </div>
 
 </div>
@@ -1396,26 +806,6 @@ loadWebsites();
   function goAdmin(){
   window.location.href = "login.html";
 }
-function openSafe(url){
-  if(!url || url === "#"){
-    alert("Link not available for this item");
-    return;
-  }
-  window.open(url, "_blank");
-}
-   document.addEventListener("click", (e) => {
-  const btn = e.target.closest("button[data-url]");
-  if (!btn) return;
-
-  const url = btn.dataset.url;
-
-  if (!url || url.trim() === "" || url === "#") {
-    alert("Link not available");
-    return;
-  }
-
-  window.open(url.trim(), "_blank");
-});
 </script>
 
 </body>
